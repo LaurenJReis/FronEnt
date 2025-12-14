@@ -4,48 +4,63 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "./Button";
 
-export default function LoginForm() {
-  const router = useRouter();
+const Valide = {
+  email: "admin@admin.com",
+  senha: "admin",
+};
 
+export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [erro, setErro] = useState(false);
+  const [erro, setErro] = useState("");
 
-  function handleLogin() {
-    if (email === "admin@admin.com" && senha === "123") {
+  const router = useRouter();
+
+  function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    setErro("");
+
+    if (!email || !senha) {
+      setErro("Preencha todos os campos");
+      return;
+    }
+
+    if (email === Valide.email && senha === Valide.senha) {
       router.push("/dashboard");
     } else {
-      setErro(true);
+      setErro("Email ou senha incorretos");
     }
   }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md w-80">
-      <h1 className="text-xl font-bold mb-4 text-center">Login</h1>
-
-      <input
-        type="email"
-        placeholder="Email"
-        className="w-full border p-2 mb-3 rounded"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-
-      <input
-        type="password"
-        placeholder="Senha"
-        className="w-full border p-2 mb-3 rounded"
-        value={senha}
-        onChange={(e) => setSenha(e.target.value)}
-      />
+    <div className="bg-white text-purple-900 p-8 rounded-xl shadow-lg w-full max-w-sm">
+      <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
 
       {erro && (
-        <p className="text-red-500 text-sm mb-2">
-          Email ou senha inválidos
-        </p>
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {erro}
+        </div>
       )}
 
-      <Button texto="Entrar" onClick={handleLogin} />
+      <form onSubmit={handleLogin} className="space-y-4">
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full p-2 border border-purple-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+        />
+
+        <input
+          type="password"
+          placeholder="Senha"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          className="w-full p-2 border border-purple-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+        />
+
+        <Button texto="Entrar" />
+      </form>
     </div>
   );
 }

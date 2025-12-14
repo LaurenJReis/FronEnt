@@ -2,7 +2,7 @@ import "./globals.css";
 
 export const metadata = {
   title: "Front Login",
-  description: "Sistema de login com Next.js",
+  description: "Login",
 };
 
 export default function RootLayout({
